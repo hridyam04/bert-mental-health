@@ -1,6 +1,7 @@
 import pandas as pd
 from datasets import load_dataset
 from transformers import BertTokenizer
+import os
 
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 
@@ -25,10 +26,13 @@ if __name__ == "__main__":
     dataset, label_names = load_goemotions()
     dataset = dataset.map(lambda x: encode_labels(x, label_names))
 
+    output_dir = "../data/processed"
+    os.makedirs(output_dir, exist_ok=True)
+
     df_train = pd.DataFrame({'text': dataset['train']['text'], 'labels': dataset['train']['label_vector']})
     df_val = pd.DataFrame({'text': dataset['validation']['text'], 'labels': dataset['validation']['label_vector']})
     df_test = pd.DataFrame({'text': dataset['test']['text'], 'labels': dataset['test']['label_vector']})
 
-    save_to_csv(df_train, "../data/processed/train.csv")
-    save_to_csv(df_val, "../data/processed/val.csv")
-    save_to_csv(df_test, "../data/processed/test.csv")
+    save_to_csv(df_train, f"{output_dir}/train.csv")
+    save_to_csv(df_val, f"{output_dir}/val.csv")
+    save_to_csv(df_test, f"{output_dir}/test.csv")

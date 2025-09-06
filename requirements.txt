@@ -9,3 +9,4 @@ datasets
 matplotlib
 pymongo
 streamlit
+hf_xet
